@@ -52,7 +52,7 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 # renderer fails at start with the name of the missing file.
 #
 # fonts-dejavu-core is the one font in the image: Chromium draws the map's
-# attribution ("VersaTiles", bottom right) in it. Map and marker labels come
+# attribution (bottom right) in it. Map and marker labels come
 # as glyphs from the tile server and need no font here — except Chinese,
 # Japanese and Korean characters, which MapLibre draws with a system font
 # and which therefore come out as empty boxes in a video from this image.

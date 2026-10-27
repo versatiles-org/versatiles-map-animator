@@ -4,7 +4,9 @@
 	import 'maplibre-gl/dist/maplibre-gl.css';
 	import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 	import { onDestroy, onMount, untrack } from 'svelte';
+	import MapAttribution from './MapAttribution.svelte';
 	import VersatilesLogo from './VersatilesLogo.svelte';
+	import { attributionParts, type AttributionPart } from '../attribution';
 	import {
 		getAnnotationOpacity,
 		resolveAnnotation,
@@ -349,6 +351,8 @@
 	// The options of the style the map currently shows, or `null` while a
 	// style is still loading — see the style effect below.
 	let shownStyleOptions: MapStyleOptions | null = null;
+	// The attribution of the sources of the style the map shows.
+	let attribution = $state<AttributionPart[]>([]);
 
 	onMount(async () => {
 		// Building the style waits for the TileJSON. Whatever changes in the
@@ -360,6 +364,7 @@
 			initialOptions = untrack(() => store.mapStyleOptions);
 			style = await buildMapStyle(initialOptions);
 		} while (initialOptions !== untrack(() => store.mapStyleOptions));
+		attribution = attributionParts(style);
 		const initialCam = untrack(() => store.sampledCamera) ?? DEFAULT_INITIAL_VIEW;
 		// Compute the zoom offset from the container directly — `zoomOffset()`
 		// can't run yet because `map` doesn't exist.
@@ -374,8 +379,8 @@
 			bearing: initialCam.bearing,
 			roll: initialCam.roll,
 			maxPitch: 90,
-			// Disable MapLibre's built-in attribution control; we render a
-			// minimal "VersaTiles" watermark in the corner instead (see template).
+			// Disable MapLibre's built-in attribution control; we render the
+			// attribution as plain text in the corner instead (see template).
 			attributionControl: false,
 			centerClampedToGround: false,
 			// Animations sweep across many zoom levels and revisit the same
@@ -573,6 +578,7 @@
 			// the rest. Re-install once the new style has finished loading.
 			annotationsReady = false;
 			map.setStyle(newStyle, { diff: false });
+			attribution = attributionParts(newStyle);
 			map.once('style.load', () => {
 				if (cancelled) return;
 				setupAnnotationLayer();
@@ -668,8 +674,8 @@
 		]);
 	});
 
-	// The watermark is a little stronger on a dark map — satellite imagery and
-	// the dark themes of the OSM map — where it would otherwise get lost.
+	// Watermark and attribution change for a dark map — satellite imagery and
+	// the dark themes of the OSM map — where they would otherwise get lost.
 	const onDarkMap = $derived(
 		store.style === 'satellite' || isDarkPalette(store.theme ?? DEFAULT_MAP_THEMES[store.style])
 	);
@@ -702,6 +708,11 @@
 		>
 			<VersatilesLogo onDark={onDarkMap} />
 		</a>
+		{#if attribution.length > 0}
+			<div class="attribution">
+				<MapAttribution parts={attribution} onDark={onDarkMap} />
+			</div>
+		{/if}
 	</div>
 </div>
 
@@ -780,9 +791,20 @@
 		   gets a logo three times the size of a 1280 px one. In a narrow embed
 		   it stops shrinking at the size it is still recognisable at. */
 		bottom: 0.4cqw;
-		right: 0.6cqw;
+		left: 0.6cqw;
 		z-index: 1;
 		height: max(30px, 3.3cqw);
 		user-select: none;
+	}
+	.attribution {
+		position: absolute;
+		/* Scales with the map like the watermark, and keeps clear of it: in a
+		   narrow embed the line wraps rather than running under the logo. */
+		bottom: 0.4cqw;
+		right: 0.6cqw;
+		z-index: 1;
+		max-width: calc(100% - max(30px, 3.3cqw) - 2.4cqw);
+		font-size: max(9px, 0.75cqw);
+		text-align: right;
 	}
 </style>
