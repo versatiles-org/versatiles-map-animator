@@ -54,10 +54,15 @@ Hosted but not publicly linked. The JSON schema is the durable contract; the edi
 ### Sharing & rendering
 
 - **Share by URL** — the entire animation (style, theme, terrain, sky, annotations, per-animation default style, scale, aspect ratio) is encoded into the URL hash with a bit-packed binary codec; any tester with the link sees the same animation.
+
 - **Embed** in a third-party page via a generated `<iframe>` snippet (16:9, fluid width). The viewer is served from `/view` and carries the same URL-hash payload. See [`embed-demo.html`](http://versatiles.org/versatiles-map-animator/embed-demo.html) for the iframe in real-page context with a copy-paste snippet.
+
 - **Local persistence** — the latest animation is mirrored to `localStorage`, so a reload without a hash restores it.
+
 - **Export / import as JSON** for archival or hand-off.
+
 - **Examples** — the editor's _Examples_ menu loads ready-made animations. They are the `.json` files in [`src/lib/examples/`](src/lib/examples/): to add one, export an animation as JSON, put the file there and give it a `"title"` and a `"description"` at the top.
+
 - **Render to video** via the published Docker image. The editor's **Export video…** dialog lets you pick format, quality, resolution, frame rate and motion blur and copies the command. MP4 by default; `--format prores` for editing, `--format ffv1` or `--format animation` for lossless output, and `--quality high|standard|small` for the MP4 — see [`render/README.md`](render/README.md#formats):
 
   ```sh
@@ -89,6 +94,19 @@ Output in `build/`. Deploy to any static host (GitHub Pages, Cloudflare Pages, e
 npm run check          # format + svelte-check + eslint + vitest
 npm run test:coverage  # vitest with v8 coverage
 ```
+
+## Maintenance
+
+```sh
+npm run upgrade        # upgrade the dependencies here and in render/ (vrt deps-upgrade)
+npm run doc-graph      # redraw the dependency graph below (vrt deps-graph, see vrt.config.json)
+```
+
+## Dependency Graph
+
+<!--- This chapter is generated automatically --->
+
+[![Dependency graph](docs/dependency-graph.svg)](docs/dependency-graph.svg?raw=true)
 
 ## Schema
 
