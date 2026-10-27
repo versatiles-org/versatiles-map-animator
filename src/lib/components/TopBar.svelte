@@ -120,6 +120,15 @@
 </script>
 
 <header class="topbar">
+	<a
+		class="logo"
+		href="https://versatiles.org"
+		target="_blank"
+		rel="noopener noreferrer"
+		title="VersaTiles"
+	>
+		<img src="https://versatiles.org/assets/logo/versatiles.svg" alt="VersaTiles" />
+	</a>
 	<h1 title="Drop keyframes on a map, hit play.">Map Animator</h1>
 
 	<details bind:this={menuEl} class="dropdown file-menu">
@@ -245,6 +254,16 @@
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
+	}
+	.logo {
+		display: block;
+		/* Pulled up to the title, as if the two were one wordmark. */
+		margin-right: -0.4rem;
+
+		img {
+			display: block;
+			height: 28px;
+		}
 	}
 	h1 {
 		margin: 0 0.25rem 0 0;
