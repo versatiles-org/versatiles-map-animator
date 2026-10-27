@@ -6,6 +6,8 @@
 
 Tool for composing camera animations on a VersaTiles map, previewing them in the browser and rendering them to video with a headless renderer, for TV-grade map animations.
 
+![The editor with the Alps example at 0:10: the sidebar with map and light settings, the satellite map tilted into an alpine valley, and the timeline with its keyframes](static/screenshot.jpg)
+
 Hosted but not publicly linked. The JSON schema is the durable contract; the editor and renderer talk it.
 
 ## Features
