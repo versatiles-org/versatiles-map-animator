@@ -7,10 +7,10 @@
 	 * an explanatory hint stands in for the rows.
 	 */
 
-	import { resolveAnnotation, type AnimationStore } from '../animation.svelte';
-	import { spritePreviewStyle } from '../sprite_meta';
-	import { DEFAULT_ANNOTATION_LABEL_COLOR } from '../types';
-	import Icon from './Icon.svelte';
+	import { resolveAnnotation, type AnimationStore } from '../../animation.svelte';
+	import { spritePreviewStyle } from '../../sprite_meta';
+	import { DEFAULT_ANNOTATION_LABEL_COLOR } from '../../types';
+	import Icon from '../Icon.svelte';
 
 	let { store }: { store: AnimationStore } = $props();
 

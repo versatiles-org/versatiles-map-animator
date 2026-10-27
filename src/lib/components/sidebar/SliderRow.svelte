@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Icon from './Icon.svelte';
+	import Icon from '../Icon.svelte';
 	/**
 	 * Generic numeric-slider row: label + `<input type="range">` + a small
 	 * numeric readout (formatted via the `formatValue` prop) + reset button.

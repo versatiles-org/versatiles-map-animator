@@ -7,9 +7,9 @@
 	 * results.
 	 */
 
-	import { familyLabel, FONT_GROUPS, fontVariantLabel } from '../annotation_panel_helpers';
-	import type { AnnotationLabelFont } from '../types';
-	import Icon from './Icon.svelte';
+	import { familyLabel, FONT_GROUPS, fontVariantLabel } from '../../annotation_panel_helpers';
+	import type { AnnotationLabelFont } from '../../types';
+	import Icon from '../Icon.svelte';
 
 	let {
 		value,

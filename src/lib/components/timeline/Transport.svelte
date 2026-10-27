@@ -5,8 +5,8 @@
 	 * the keyframe or move that is selected on the timeline.
 	 */
 
-	import type { AnimationStore } from '../animation.svelte';
-	import Icon from './Icon.svelte';
+	import type { AnimationStore } from '../../animation.svelte';
+	import Icon from '../Icon.svelte';
 	import Inspector from './Inspector.svelte';
 
 	let {

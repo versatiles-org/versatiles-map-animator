@@ -11,7 +11,7 @@
 	 * user is logged in there, the dialog can also hand the render to it.
 	 */
 
-	import type { AnimationStore } from '../animation.svelte';
+	import type { AnimationStore } from '../../animation.svelte';
 	import {
 		buildRenderCommand,
 		DEFAULT_FORMAT,
@@ -21,10 +21,10 @@
 		renderOutputName,
 		VIDEO_FORMATS,
 		VIDEO_QUALITIES
-	} from '../render_command';
-	import { aspectRatioValue } from '../types';
-	import { encodeAnimation } from '../url_state';
-	import Icon from './Icon.svelte';
+	} from '../../render_command';
+	import { aspectRatioValue } from '../../types';
+	import { encodeAnimation } from '../../url_state';
+	import Icon from '../Icon.svelte';
 
 	const VIDEO_WIDTHS = [640, 1280, 1920, 3840] as const;
 	type VideoWidth = (typeof VIDEO_WIDTHS)[number];

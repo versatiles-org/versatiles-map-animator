@@ -6,8 +6,8 @@
 	 * controls combine colour + width and use `HaloRow` instead).
 	 */
 
-	import { normalizeHex } from '../annotation_panel_helpers';
-	import Icon from './Icon.svelte';
+	import { normalizeHex } from '../../annotation_panel_helpers';
+	import Icon from '../Icon.svelte';
 
 	let {
 		label,

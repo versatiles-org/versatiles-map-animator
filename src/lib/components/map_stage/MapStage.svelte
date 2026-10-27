@@ -6,15 +6,15 @@
 	import { onDestroy, onMount, untrack } from 'svelte';
 	import MapAttribution from './MapAttribution.svelte';
 	import VersatilesLogo from './VersatilesLogo.svelte';
-	import { attributionParts, type AttributionPart } from '../attribution';
+	import { attributionParts, type AttributionPart } from '../../attribution';
 	import {
 		getAnnotationOpacity,
 		resolveAnnotation,
 		type AnimationStore
-	} from '../animation.svelte';
+	} from '../../animation.svelte';
 	import { isDarkPalette } from '@versatiles/style';
-	import { buildMapStyle, onlySunMoved, sunPatch, type MapStyleOptions } from '../map_style';
-	import { refreshTerrainTexturesAtOnce } from '../render_mode';
+	import { buildMapStyle, onlySunMoved, sunPatch, type MapStyleOptions } from '../../map_style';
+	import { refreshTerrainTexturesAtOnce } from '../../render_mode';
 	import {
 		ANNOTATION_ICON_OFFSETS,
 		ANNOTATION_ICON_ROTATION_OFFSETS,
@@ -37,7 +37,7 @@
 		type Annotation,
 		type CameraState,
 		type LabelPosition
-	} from '../types';
+	} from '../../types';
 
 	/**
 	 * MapLibre 6 loads its worker from a sibling file resolved at runtime via

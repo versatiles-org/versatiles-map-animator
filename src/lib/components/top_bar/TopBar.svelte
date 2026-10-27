@@ -7,12 +7,12 @@
 	 */
 
 	import { resolve } from '$app/paths';
-	import type { AnimationStore } from '../animation.svelte';
-	import { EXAMPLES, type Example } from '../examples';
-	import { downloadAnimation, uploadAnimation } from '../json_io';
-	import { encodeAnimation } from '../url_state';
+	import type { AnimationStore } from '../../animation.svelte';
+	import { EXAMPLES, type Example } from '../../examples';
+	import { downloadAnimation, uploadAnimation } from '../../json_io';
+	import { encodeAnimation } from '../../url_state';
 	import EmbedDialog from './EmbedDialog.svelte';
-	import Icon from './Icon.svelte';
+	import Icon from '../Icon.svelte';
 	import VideoDialog from './VideoDialog.svelte';
 
 	let {

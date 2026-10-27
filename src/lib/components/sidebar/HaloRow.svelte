@@ -6,8 +6,8 @@
 	 * and supplies change/reset handlers.
 	 */
 
-	import { normalizeHex } from '../annotation_panel_helpers';
-	import Icon from './Icon.svelte';
+	import { normalizeHex } from '../../annotation_panel_helpers';
+	import Icon from '../Icon.svelte';
 
 	let {
 		color,

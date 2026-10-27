@@ -18,12 +18,12 @@
 	 * application.
 	 */
 
-	import type { AnimationStore } from '../animation.svelte';
-	import { MAP_STYLE_LABELS } from '../types';
+	import type { AnimationStore } from '../../animation.svelte';
+	import { MAP_STYLE_LABELS } from '../../types';
 	import AnnotationEditor from './AnnotationEditor.svelte';
 	import AnnotationList from './AnnotationList.svelte';
 	import DefaultStyleEditor from './DefaultStyleEditor.svelte';
-	import Icon from './Icon.svelte';
+	import Icon from '../Icon.svelte';
 	import SceneSettings from './SceneSettings.svelte';
 
 	let { store }: { store: AnimationStore } = $props();

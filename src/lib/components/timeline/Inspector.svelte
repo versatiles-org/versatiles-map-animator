@@ -8,8 +8,8 @@
 	 * selection, so a keyframe and a marker can be worked on side by side.
 	 */
 
-	import type { AnimationStore } from '../animation.svelte';
-	import { easeKindOf } from '../moves';
+	import type { AnimationStore } from '../../animation.svelte';
+	import { easeKindOf } from '../../moves';
 	import {
 		DEFAULT_EASE,
 		holdOf,
@@ -18,8 +18,8 @@
 		TIME_RESOLUTION,
 		type EaseSide,
 		type Keyframe
-	} from '../types';
-	import Icon from './Icon.svelte';
+	} from '../../types';
+	import Icon from '../Icon.svelte';
 	import PathIcon from './PathIcon.svelte';
 
 	let { store }: { store: AnimationStore } = $props();

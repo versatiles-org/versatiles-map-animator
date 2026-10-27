@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { resolveAnnotation, type AnimationStore } from '../animation.svelte';
-	import { MOVE_KIND_LABELS } from '../moves';
+	import { resolveAnnotation, type AnimationStore } from '../../animation.svelte';
+	import { MOVE_KIND_LABELS } from '../../moves';
 	import {
 		SPEED_SAMPLES,
 		speedCurve,
@@ -8,8 +8,8 @@
 		speedNote,
 		speedProfile,
 		speedScaleFor
-	} from '../speed';
-	import { departureOf, holdOf, snapTime, TIME_RESOLUTION } from '../types';
+	} from '../../speed';
+	import { departureOf, holdOf, snapTime, TIME_RESOLUTION } from '../../types';
 	import PathIcon from './PathIcon.svelte';
 	import Transport from './Transport.svelte';
 

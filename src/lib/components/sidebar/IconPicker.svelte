@@ -7,10 +7,10 @@
 	 * accessibility (ariaLabel) are driven by props.
 	 */
 
-	import { shortName } from '../annotation_panel_helpers';
-	import { spritePreviewStyle } from '../sprite_meta';
-	import { ANNOTATION_ICONS, type AnnotationIcon } from '../types';
-	import Icon from './Icon.svelte';
+	import { shortName } from '../../annotation_panel_helpers';
+	import { spritePreviewStyle } from '../../sprite_meta';
+	import { ANNOTATION_ICONS, type AnnotationIcon } from '../../types';
+	import Icon from '../Icon.svelte';
 
 	let {
 		value,

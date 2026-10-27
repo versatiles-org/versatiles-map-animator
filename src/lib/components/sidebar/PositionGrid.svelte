@@ -7,9 +7,9 @@
 	 * the hood for keyboard navigation.
 	 */
 
-	import { POSITION_GRID } from '../annotation_panel_helpers';
-	import type { LabelPosition } from '../types';
-	import Icon from './Icon.svelte';
+	import { POSITION_GRID } from '../../annotation_panel_helpers';
+	import type { LabelPosition } from '../../types';
+	import Icon from '../Icon.svelte';
 
 	let {
 		label = 'Side',

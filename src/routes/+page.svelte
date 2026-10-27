@@ -10,10 +10,10 @@
 		writeAnimationToStorage,
 		writeAnimationToUrl
 	} from '#lib/url_state/index.ts';
-	import MapStage from '#lib/components/MapStage.svelte';
-	import Sidebar from '#lib/components/Sidebar.svelte';
-	import Timeline from '#lib/components/Timeline.svelte';
-	import TopBar from '#lib/components/TopBar.svelte';
+	import MapStage from '#lib/components/map_stage/MapStage.svelte';
+	import Sidebar from '#lib/components/sidebar/Sidebar.svelte';
+	import Timeline from '#lib/components/timeline/Timeline.svelte';
+	import TopBar from '#lib/components/top_bar/TopBar.svelte';
 
 	const store = new AnimationStore();
 	let urlError = $state<string | null>(null);

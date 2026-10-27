@@ -3,7 +3,7 @@
 	import { AnimationStore } from '#lib/animation.svelte.ts';
 	import { aspectRatioValue } from '#lib/types.ts';
 	import { readAnimationFromUrl } from '#lib/url_state/index.ts';
-	import MapStage from '#lib/components/MapStage.svelte';
+	import MapStage from '#lib/components/map_stage/MapStage.svelte';
 
 	const store = new AnimationStore();
 	let loadError = $state<string | null>(null);

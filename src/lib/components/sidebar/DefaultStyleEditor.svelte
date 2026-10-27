@@ -8,12 +8,12 @@
 	 * `ANNOTATION_FIELD_DEFAULTS`). Style-only: see `AnnotationStyle`.
 	 */
 
-	import type { AnimationStore } from '../animation.svelte';
-	import { haloAuto, makeOnNum, makeOnText } from '../annotation_panel_helpers';
+	import type { AnimationStore } from '../../animation.svelte';
+	import { haloAuto, makeOnNum, makeOnText } from '../../annotation_panel_helpers';
 	import ColorRow from './ColorRow.svelte';
 	import FontSelect from './FontSelect.svelte';
 	import HaloRow from './HaloRow.svelte';
-	import Icon from './Icon.svelte';
+	import Icon from '../Icon.svelte';
 	import IconPicker from './IconPicker.svelte';
 	import PositionGrid from './PositionGrid.svelte';
 	import SliderRow from './SliderRow.svelte';
@@ -28,7 +28,7 @@
 		DEFAULT_LABEL_HALO_WIDTH,
 		DEFAULT_LABEL_POSITION,
 		type AnnotationStyle
-	} from '../types';
+	} from '../../types';
 
 	let { store }: { store: AnimationStore } = $props();
 

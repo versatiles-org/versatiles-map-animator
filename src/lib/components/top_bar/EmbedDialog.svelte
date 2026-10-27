@@ -8,9 +8,9 @@
 	 */
 
 	import { resolve } from '$app/paths';
-	import type { AnimationStore } from '../animation.svelte';
-	import { encodeAnimation } from '../url_state';
-	import Icon from './Icon.svelte';
+	import type { AnimationStore } from '../../animation.svelte';
+	import { encodeAnimation } from '../../url_state';
+	import Icon from '../Icon.svelte';
 
 	let {
 		store,

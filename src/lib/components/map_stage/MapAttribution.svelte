@@ -5,7 +5,7 @@
 	 * legible on any map and the eye still passes over it. `onDark` turns it
 	 * light for the dark maps.
 	 */
-	import type { AttributionPart } from '../attribution';
+	import type { AttributionPart } from '../../attribution';
 
 	let { parts, onDark = false }: { parts: AttributionPart[]; onDark?: boolean } = $props();
 </script>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { AnimationStore } from '../animation.svelte';
+	import type { AnimationStore } from '../../animation.svelte';
 	import {
 		ASPECT_RATIOS,
 		DEFAULT_MAP_THEMES,
@@ -21,7 +21,7 @@
 		type MapTheme,
 		type ScreenAnchor,
 		type Sun
-	} from '../types';
+	} from '../../types';
 
 	/**
 	 * The settings of the animation as a whole, in three parts that the

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PathStyle } from '../types';
+	import type { PathStyle } from '../../types';
 
 	/**
 	 * Pictograms of the camera-path vocabulary: the two travel styles of a

@@ -8,16 +8,21 @@
 	 * fades inside the window.
 	 */
 
-	import { resolveAnnotation, type AnimationStore } from '../animation.svelte';
-	import { haloAuto, makeOnNum, makeOnText } from '../annotation_panel_helpers';
+	import { resolveAnnotation, type AnimationStore } from '../../animation.svelte';
+	import { haloAuto, makeOnNum, makeOnText } from '../../annotation_panel_helpers';
 	import ColorRow from './ColorRow.svelte';
 	import FontSelect from './FontSelect.svelte';
 	import HaloRow from './HaloRow.svelte';
-	import Icon from './Icon.svelte';
+	import Icon from '../Icon.svelte';
 	import IconPicker from './IconPicker.svelte';
 	import PositionGrid from './PositionGrid.svelte';
 	import SliderRow from './SliderRow.svelte';
-	import { ANNOTATION_FIELD_DEFAULTS, snapTime, TIME_RESOLUTION, type Annotation } from '../types';
+	import {
+		ANNOTATION_FIELD_DEFAULTS,
+		snapTime,
+		TIME_RESOLUTION,
+		type Annotation
+	} from '../../types';
 
 	let { store }: { store: AnimationStore } = $props();
 
