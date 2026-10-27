@@ -155,6 +155,21 @@ describe('3D buildings', () => {
 	});
 });
 
+describe('land cover', () => {
+	const forest = (options: MapStyleOptions) =>
+		buildBaseStyle(options).layers.find((l) => l.id === 'land-forest');
+
+	it('draws the low-zoom land cover of the tiles when the group is shown', () => {
+		const layer = forest(base);
+		expect(layer?.minzoom).toBeUndefined();
+		expect(layer?.type === 'fill' && typeof layer.paint?.['fill-opacity']).toBe('number');
+	});
+
+	it('draws no land cover at all when the group is hidden', () => {
+		expect(forest({ ...base, hiddenLayers: ['land'] })).toBeUndefined();
+	});
+});
+
 describe('terrain', () => {
 	const hillshades = (options: MapStyleOptions) =>
 		buildBaseStyle(options).layers.filter((l) => l.type === 'hillshade').length;
