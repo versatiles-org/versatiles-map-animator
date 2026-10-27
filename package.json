@@ -30,7 +30,7 @@
 		"test:e2e": "playwright test",
 		"test:e2e:install": "playwright install --with-deps chromium",
 		"test": "vitest run",
-		"upgrade": "npm-check-updates -u --peer && npm install && npm audit fix"
+		"upgrade": "npm-check-updates -u --peer && npm install && npm audit fix && cd render && npm-check-updates -u --peer && npm install && npm audit fix"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
