@@ -2,7 +2,6 @@
 	"deps-graph": {
 		"include": ["src", "render", "server"],
 		"barrel": ["src/lib/examples"],
-		"collapse-dir": ["src/lib/codec/*", "src/lib/url_state/*"],
 		"merge-outgoing": ["src/lib/components/*"],
 		"exclude": [
 			"server/test-certificate.mjs",
