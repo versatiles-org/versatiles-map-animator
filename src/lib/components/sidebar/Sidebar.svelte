@@ -137,6 +137,9 @@
 			</svg>
 			<span>Source on GitHub</span>
 		</a>
+		<a href="https://versatiles.org/donate/" target="_blank" rel="noopener noreferrer">
+			<span>Please support us</span>
+		</a>
 	</footer>
 </aside>
 
@@ -272,6 +275,9 @@
 		/* Push to the bottom of the sidebar's flex column. */
 		margin-top: auto;
 		padding-top: 0.5rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 1rem;
 
 		a {
 			display: inline-flex;
