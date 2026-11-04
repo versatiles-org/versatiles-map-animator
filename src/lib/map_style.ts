@@ -179,8 +179,8 @@ export function buildBaseStyle(options: MapStyleOptions): StyleSpecification {
 						features: {
 							terrain,
 							hillshade: terrain,
-							// The tiles carry land cover below the zooms OSM starts at; this
-							// lets the land fills draw it there instead of fading in late.
+							// Land cover below the zooms OSM starts at, from tiles of its own
+							// (the `versatiles-landcover` source), so land doesn't fade in late.
 							landcover: !options.hiddenLayers?.includes('land'),
 							buildings: options.buildings3d ? 'extruded' : 'flat'
 						}

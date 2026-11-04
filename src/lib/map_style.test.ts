@@ -156,17 +156,24 @@ describe('3D buildings', () => {
 });
 
 describe('land cover', () => {
-	const forest = (options: MapStyleOptions) =>
-		buildBaseStyle(options).layers.find((l) => l.id === 'land-forest');
+	// The land cover of low zooms comes from tiles of its own; the land layers of
+	// the OSM tiles only fade in from zoom 7.
+	const source = 'versatiles-landcover';
+	const landcover = (options: MapStyleOptions) =>
+		buildBaseStyle(options).layers.filter((l) => 'source' in l && l.source === source);
 
-	it('draws the low-zoom land cover of the tiles when the group is shown', () => {
-		const layer = forest(base);
-		expect(layer?.minzoom).toBeUndefined();
-		expect(layer?.type === 'fill' && typeof layer.paint?.['fill-opacity']).toBe('number');
+	it('draws the low-zoom land cover from its own tiles when the group is shown', () => {
+		expect(buildBaseStyle(base).sources).toHaveProperty(source);
+		const forest = landcover(base).find((l) => l.id === 'landcover-land-forest');
+		expect(forest?.type).toBe('fill');
+		expect(forest?.minzoom).toBeUndefined();
 	});
 
 	it('draws no land cover at all when the group is hidden', () => {
-		expect(forest({ ...base, hiddenLayers: ['land'] })).toBeUndefined();
+		const hidden: MapStyleOptions = { ...base, hiddenLayers: ['land'] };
+		expect(buildBaseStyle(hidden).sources).not.toHaveProperty(source);
+		expect(landcover(hidden)).toEqual([]);
+		expect(buildBaseStyle(hidden).layers.find((l) => l.id === 'land-forest')).toBeUndefined();
 	});
 });
 
@@ -262,8 +269,8 @@ describe('buildMapStyle', () => {
 		tiles: [`/tiles/${path}/{z}/{x}/{y}`],
 		minzoom: 0,
 		maxzoom: 14,
-		// Only vector tilesets carry `vector_layers`; the builder checks it.
-		...(path === 'osm' && { vector_layers: [] })
+		// Only vector tilesets carry `vector_layers`; `inlineSources` checks it.
+		...(['osm', 'landcover-vectors'].includes(path) && { vector_layers: [] })
 	});
 
 	afterEach(() => vi.unstubAllGlobals());
@@ -273,7 +280,7 @@ describe('buildMapStyle', () => {
 		vi.stubGlobal('fetch', async (input: string | URL | Request) => {
 			const url = String(input instanceof Request ? input.url : input);
 			requested.push(url);
-			const path = /\/tiles\/(\w+)\/tiles\.json$/.exec(url)?.[1] ?? 'unknown';
+			const path = /\/tiles\/([\w-]+)\/tiles\.json$/.exec(url)?.[1] ?? 'unknown';
 			return new Response(JSON.stringify(tileJson(path)));
 		});
 
@@ -283,6 +290,9 @@ describe('buildMapStyle', () => {
 		}
 		expect(style.sources['versatiles-shortbread']).toMatchObject({
 			tiles: ['https://tiles.versatiles.org/tiles/osm/{z}/{x}/{y}']
+		});
+		expect(style.sources['versatiles-landcover']).toMatchObject({
+			tiles: ['https://tiles.versatiles.org/tiles/landcover-vectors/{z}/{x}/{y}']
 		});
 		expect(style.sources['elevation']).toMatchObject({
 			tiles: ['https://tiles.versatiles.org/tiles/elevation/{z}/{x}/{y}']
