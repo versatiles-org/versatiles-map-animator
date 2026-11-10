@@ -13,7 +13,7 @@ test('map tiles are loaded from the tile server, not from the page origin', asyn
 	const tiles: { host: string; status: number }[] = [];
 	page.on('response', (res) => {
 		const url = new URL(res.url());
-		if (/^\/tiles\/\w+\/\d+\/\d+\/\d+/.test(url.pathname)) {
+		if (/^\/tiles\/[\w-]+\/\d+\/\d+\/\d+/.test(url.pathname)) {
 			tiles.push({ host: url.host, status: res.status() });
 		}
 	});
