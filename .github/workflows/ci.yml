@@ -1,10 +1,22 @@
 name: CI
 
+# Changes that touch nothing but documentation start no run: neither the
+# site nor the images contain these files.
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'LICENSE'
+      - '.github/FUNDING.yml'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'LICENSE'
+      - '.github/FUNDING.yml'
   workflow_dispatch:
 
 permissions:
