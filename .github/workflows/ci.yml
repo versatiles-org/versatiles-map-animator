@@ -113,6 +113,17 @@ jobs:
         with:
           path: build/
 
+  image:
+    name: Render image
+    # Pull requests build the images in docker.yml's own run; here they are
+    # pushed, and only once the tests have passed.
+    if: github.event_name != 'pull_request'
+    needs: check
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/docker.yml
+
   deploy:
     name: Deploy to GitHub Pages
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
