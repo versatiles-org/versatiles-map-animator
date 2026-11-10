@@ -2,10 +2,9 @@ name: Build and push render image
 
 # Pull requests only build the images and smoke-test them. On `main`, CI
 # (ci.yml) calls this workflow after its tests pass, so an image is never
-# pushed for a commit that fails them.
+# pushed for a commit that fails them. Releases don't build images:
+# release.yml adds the version to the tags of the images CI pushed.
 on:
-  push:
-    tags: ['v*']
   pull_request:
     branches: [main]
     # Only for changes that can break the image. The site in it is built in
@@ -26,8 +25,7 @@ permissions:
 
 concurrency:
   # Per-ref group: a new push supersedes any in-flight build on the same ref.
-  # Tag pushes have unique refs, so concurrent releases won't cancel each
-  # other. Not `github.workflow`: in a called workflow that is the caller's
+  # Not `github.workflow`: in a called workflow that is the caller's
   # name, and the same group as the caller's own would cancel the call.
   group: docker-image-${{ github.ref }}
   cancel-in-progress: true
@@ -87,7 +85,6 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=ref,event=branch
-            type=ref,event=tag
             type=sha,format=short
 
       # Each platform on its own first, loaded into Docker for the smoke test:

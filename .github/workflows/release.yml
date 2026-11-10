@@ -1,0 +1,132 @@
+name: Release
+
+# A tag like "v0.3.0" on a commit of `main` releases that commit: the images
+# that CI built and tested for it (tagged `sha-<commit>`) get the version as
+# their tags, without being built again, and the tag gets a GitHub release.
+# The tag must match the version in package.json. A prerelease
+# ("v0.3.0-rc.1") gets only its full version as a tag, so `0.3` stays the
+# last release.
+#
+# It can also be started by hand for a tag, e.g. to run it again after CI
+# was cancelled for the tagged commit: `gh workflow run release.yml -f tag=v0.3.0`.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'The tag of the release, e.g. "v0.3.0"'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+
+env:
+  # The pushed tag, or the one given by hand. Only used through the
+  # environment, so a tag name cannot inject shell.
+  TAG: ${{ inputs.tag || github.ref_name }}
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      # to create the GitHub release
+      contents: write
+      # to add tags to the images
+      packages: write
+    steps:
+      - name: Check the tag
+        run: |
+          if ! [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::\"$TAG\" is no tag like v0.3.0 or v0.3.0-rc.1"
+            exit 1
+          fi
+
+      # the tagged commit, also when started by hand from another branch
+      - uses: actions/checkout@v7
+        with:
+          ref: refs/tags/${{ env.TAG }}
+
+      - name: Check that the tag matches the version
+        run: |
+          version="$(jq -r .version package.json)"
+          if [ "${TAG#v}" != "$version" ]; then
+            echo "::error::Tag $TAG does not match version $version in package.json"
+            exit 1
+          fi
+
+      - name: Lowercase image name
+        id: image
+        run: |
+          name="ghcr.io/${{ github.repository }}"
+          echo "name=${name,,}" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to ghcr.io
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # When the tag is pushed together with its commit, CI is still testing
+      # and building the images; that takes about 15 minutes.
+      - name: Wait for the images of the commit
+        env:
+          IMAGE: ${{ steps.image.outputs.name }}
+        run: |
+          commit="$(git rev-parse HEAD)"
+          sha="sha-${commit::7}" # as docker/metadata-action names it
+          for suffix in '' -gpu -server; do
+            for attempt in $(seq 60); do
+              if docker buildx imagetools inspect "$IMAGE:$sha$suffix" >/dev/null 2>&1; then
+                echo "found $IMAGE:$sha$suffix"
+                continue 2
+              fi
+              [ "$attempt" = 1 ] && echo "waiting for $IMAGE:$sha$suffix …"
+              sleep 30
+            done
+            echo "::error::No image $IMAGE:$sha$suffix after 30 minutes. It is pushed by CI's run for the tagged commit on main; when that run failed or was cancelled, run it again, then this workflow: gh workflow run release.yml -f tag=$TAG"
+            exit 1
+          done
+
+      - name: Tag the images with the version
+        env:
+          IMAGE: ${{ steps.image.outputs.name }}
+        run: |
+          commit="$(git rev-parse HEAD)"
+          sha="sha-${commit::7}"
+          version="${TAG#v}"
+          tags=("$version")
+          if [[ "$version" != *-* ]]; then
+            major="${version%%.*}"
+            minor="${version%.*}"
+            tags+=("$minor")
+            # 0.x has no stable major version to follow
+            if [ "$major" != 0 ]; then tags+=("$major"); fi
+          fi
+          for suffix in '' -gpu -server; do
+            args=()
+            for tag in "${tags[@]}"; do args+=(--tag "$IMAGE:$tag$suffix"); done
+            docker buildx imagetools create "${args[@]}" "$IMAGE:$sha$suffix"
+            echo "$IMAGE:$sha$suffix → ${tags[*]/%/$suffix}"
+          done
+
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          IMAGE: ${{ steps.image.outputs.name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "The release $TAG exists already."
+            exit 0
+          fi
+          version="${TAG#v}"
+          prerelease=false
+          if [[ "$version" == *-* ]]; then prerelease=true; fi
+          notes="Images: \`$IMAGE:$version\`, \`$IMAGE:$version-gpu\` and \`$IMAGE:$version-server\`."
+          gh release create "$TAG" --verify-tag --generate-notes --notes "$notes" --prerelease="$prerelease"

@@ -102,6 +102,17 @@ npm run upgrade        # upgrade the dependencies here and in render/ (vrt deps-
 npm run doc-graph      # redraw the dependency graph below (vrt deps-graph, see vrt.config.json)
 ```
 
+## Release
+
+Raise `version` in `package.json`, commit it on `main`, then tag that commit and push both:
+
+```sh
+git tag v0.3.0
+git push origin main v0.3.0
+```
+
+The release workflow waits until CI has tested the commit and pushed its images, tags those images `0.3.0` and `0.3` (and the same with `-gpu` and `-server`), and creates the GitHub release. `latest` keeps following `main`.
+
 ## Dependency Graph
 
 <!--- This chapter is generated automatically --->
