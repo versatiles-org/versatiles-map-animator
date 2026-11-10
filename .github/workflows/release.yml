@@ -42,6 +42,8 @@ jobs:
       contents: write
       # to add tags to the images
       packages: write
+      # to see whether CI's run for the tagged commit failed
+      actions: read
     steps:
       - name: Check the tag
         run: |
@@ -77,23 +79,32 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # When the tag is pushed together with its commit, CI is still testing
-      # and building the images; that takes about 15 minutes.
+      # and building the images; that takes about 5 minutes, 15 when its
+      # build cache is cold. When CI fails or is cancelled, it pushes no
+      # images, so there is no point in waiting any longer.
       - name: Wait for the images of the commit
         env:
+          GH_TOKEN: ${{ github.token }}
           IMAGE: ${{ steps.image.outputs.name }}
         run: |
           commit="$(git rev-parse HEAD)"
           sha="sha-${commit::7}" # as docker/metadata-action names it
+          retry="Fix or re-run CI for $commit, then run this workflow again: gh workflow run release.yml -f tag=$TAG"
           for suffix in '' -gpu -server; do
             for attempt in $(seq 60); do
               if docker buildx imagetools inspect "$IMAGE:$sha$suffix" >/dev/null 2>&1; then
                 echo "found $IMAGE:$sha$suffix"
                 continue 2
               fi
+              ci="$(gh run list --workflow ci.yml --commit "$commit" --limit 1 --json status,conclusion --jq '.[0] | "\(.status) \(.conclusion)"')"
+              if [[ "$ci" == completed* && "$ci" != "completed success" ]]; then
+                echo "::error::CI's run for $commit ended with ${ci#completed }, so it pushed no images. $retry"
+                exit 1
+              fi
               [ "$attempt" = 1 ] && echo "waiting for $IMAGE:$sha$suffix …"
               sleep 30
             done
-            echo "::error::No image $IMAGE:$sha$suffix after 30 minutes. It is pushed by CI's run for the tagged commit on main; when that run failed or was cancelled, run it again, then this workflow: gh workflow run release.yml -f tag=$TAG"
+            echo "::error::No image $IMAGE:$sha$suffix after 30 minutes. $retry"
             exit 1
           done
 
