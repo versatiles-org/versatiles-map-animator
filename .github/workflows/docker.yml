@@ -8,6 +8,16 @@ on:
     tags: ['v*']
   pull_request:
     branches: [main]
+    # Only for changes that can break the image. The site in it is built in
+    # CI's own run; the image only adds the steps of these files.
+    paths:
+      - 'render/**'
+      - 'server/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.dockerignore'
+      - '.github/workflows/docker.yml'
+      - '!**.md'
   workflow_call:
 
 permissions:
