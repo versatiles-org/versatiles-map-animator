@@ -1,8 +1,11 @@
 name: Release
 
-# A tag like "v0.3.0" on a commit of `main` releases that commit: the images
+# `npm run release` (vrt release-npm) raises the version, commits it to
+# `main` with a tag like "v0.3.0", pushes both and creates the GitHub release
+# with its notes. This workflow then releases the tagged commit: the images
 # that CI built and tested for it (tagged `sha-<commit>`) get the version as
-# their tags, without being built again, and the tag gets a GitHub release.
+# their tags, without being built again, and the release notes get the names
+# of the images. For a tag pushed by hand, it creates the release itself.
 # The tag must match the version in package.json. A prerelease
 # ("v0.3.0-rc.1") gets only its full version as a tag, so `0.3` stays the
 # last release.
@@ -116,17 +119,30 @@ jobs:
             echo "$IMAGE:$sha$suffix → ${tags[*]/%/$suffix}"
           done
 
-      - name: Create the GitHub release
+      # `npm run release` has created the release by now: it does so right
+      # after pushing the tag, and the images take minutes. Its notes keep
+      # their text and get the images added, once.
+      - name: Add the images to the GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
           IMAGE: ${{ steps.image.outputs.name }}
         run: |
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "The release $TAG exists already."
-            exit 0
-          fi
           version="${TAG#v}"
-          prerelease=false
-          if [[ "$version" == *-* ]]; then prerelease=true; fi
-          notes="Images: \`$IMAGE:$version\`, \`$IMAGE:$version-gpu\` and \`$IMAGE:$version-server\`."
-          gh release create "$TAG" --verify-tag --generate-notes --notes "$notes" --prerelease="$prerelease"
+          images="## Docker images
+
+          - \`$IMAGE:$version\`: the renderer
+          - \`$IMAGE:$version-gpu\`: the renderer with the drivers for \`--gpu\`
+          - \`$IMAGE:$version-server\`: the render server"
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            notes="$(gh release view "$TAG" --json body --jq .body)"
+            if grep -q '^## Docker images' <<< "$notes"; then
+              echo "The notes of $TAG list the images already."
+              exit 0
+            fi
+            gh release edit "$TAG" --notes "$notes"$'\n\n'"$images"
+          else
+            prerelease=false
+            if [[ "$version" == *-* ]]; then prerelease=true; fi
+            gh release create "$TAG" --verify-tag --generate-notes --notes "$images" --prerelease="$prerelease"
+          fi

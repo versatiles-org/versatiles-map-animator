@@ -104,14 +104,11 @@ npm run doc-graph      # redraw the dependency graph below (vrt deps-graph, see 
 
 ## Release
 
-Raise `version` in `package.json`, commit it on `main`, then tag that commit and push both:
-
 ```sh
-git tag v0.3.0
-git push origin main v0.3.0
+npm run release        # asks for the new version; `npm run release -- -b minor` skips the question
 ```
 
-The release workflow waits until CI has tested the commit and pushed its images, tags those images `0.3.0` and `0.3` (and the same with `-gpu` and `-server`), and creates the GitHub release. `latest` keeps following `main`.
+`vrt release-npm` runs `npm run check`, raises the version, updates `CHANGELOG.md`, commits and tags it (`v0.3.0`), pushes both to `main` and creates the GitHub release. The release workflow then waits until CI has tested that commit and pushed its images, tags them `0.3.0` and `0.3` (the same with `-gpu` and `-server`) and lists them in the release notes. `latest` keeps following `main`.
 
 ## Dependency Graph
 

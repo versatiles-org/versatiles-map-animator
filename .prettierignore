@@ -3,3 +3,4 @@ src/app.html
 build/
 .svelte-kit/
 coverage/
+CHANGELOG.md
