@@ -35,6 +35,11 @@ with it Docker looks for an image of that name online and fails.
 `npm run docker:build:gpu` builds the variant with the GPU drivers for
 [`--gpu`](#gpu), as `versatiles-map-animator:gpu`.
 
+`render/smoke-test.sh versatiles-map-animator renderer` checks, without the
+network, that the image starts: the browser finds its libraries and WebGL,
+ffmpeg encodes. CI runs it on every image before it is pushed; use `server`
+in place of `renderer` for the server image.
+
 ## Render an animation
 
 ```sh

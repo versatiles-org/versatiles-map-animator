@@ -1,8 +1,8 @@
 name: Build and push render image
 
-# Pull requests only build the images. On `main`, CI (ci.yml) calls this
-# workflow after its tests pass, so an image is never pushed for a commit
-# that fails them.
+# Pull requests only build the images and smoke-test them. On `main`, CI
+# (ci.yml) calls this workflow after its tests pass, so an image is never
+# pushed for a commit that fails them.
 on:
   push:
     tags: ['v*']
@@ -24,7 +24,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build and push (${{ matrix.variant }})
+    name: Build, test and push (${{ matrix.variant }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -80,7 +80,10 @@ jobs:
             type=ref,event=tag
             type=sha,format=short
 
-      - name: Build${{ github.event_name == 'pull_request' && '' || ' and push' }}
+      # Each platform on its own first, loaded into Docker for the smoke test:
+      # Docker cannot load a multi-platform image. One cache per variant and
+      # platform, or each build would evict the other's layers.
+      - name: Build (amd64)
         uses: docker/build-push-action@v7
         with:
           context: .
@@ -88,13 +91,49 @@ jobs:
           target: ${{ matrix.target }}
           build-args: |
             GPU=${{ matrix.gpu }}
-          # Multi-arch so Apple-Silicon and arm64 Linux can pull directly.
-          # arm64 builds run under QEMU on amd64 runners; that's slow but only
-          # noticeable on the first push (gha cache covers subsequent runs).
+          platforms: linux/amd64
+          load: true
+          tags: smoke-test:amd64
+          cache-from: type=gha,scope=${{ matrix.variant }}-amd64
+          cache-to: type=gha,mode=max,scope=${{ matrix.variant }}-amd64
+
+      # arm64 builds run under QEMU on amd64 runners; that's slow but only
+      # noticeable on the first build (the gha cache covers later ones).
+      - name: Build (arm64)
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: render/Dockerfile
+          target: ${{ matrix.target }}
+          build-args: |
+            GPU=${{ matrix.gpu }}
+          platforms: linux/arm64
+          load: true
+          tags: smoke-test:arm64
+          cache-from: type=gha,scope=${{ matrix.variant }}-arm64
+          cache-to: type=gha,mode=max,scope=${{ matrix.variant }}-arm64
+
+      - name: Smoke test (amd64)
+        run: render/smoke-test.sh smoke-test:amd64 ${{ matrix.target }}
+
+      - name: Smoke test (arm64, under QEMU)
+        run: render/smoke-test.sh smoke-test:arm64 ${{ matrix.target }} linux/arm64
+
+      # Multi-arch so Apple-Silicon and arm64 Linux can pull directly. Every
+      # layer comes from the two builds above.
+      - name: Push
+        if: github.event_name != 'pull_request'
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: render/Dockerfile
+          target: ${{ matrix.target }}
+          build-args: |
+            GPU=${{ matrix.gpu }}
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # One cache per variant, or each build would evict the other's layers.
-          cache-from: type=gha,scope=${{ matrix.variant }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.variant }}
+          cache-from: |
+            type=gha,scope=${{ matrix.variant }}-amd64
+            type=gha,scope=${{ matrix.variant }}-arm64
