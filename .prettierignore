@@ -1,4 +1,6 @@
 package-lock.json
+# `npm run release` (vrt release-npm) writes it with two spaces, not tabs
+package.json
 src/app.html
 build/
 .svelte-kit/
