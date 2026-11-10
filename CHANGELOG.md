@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-11-10
+
+### Build System
+
+- leave package.json to the release tool, not Prettier ([76f7610](https://github.com/versatiles-org/versatiles-map-animator/commit/76f7610a616c334c19b928a65df3ca7c8dc5a3e0))
+
+### CI/CD
+
+- **release:** stop waiting for the images when CI has failed ([1495ad9](https://github.com/versatiles-org/versatiles-map-animator/commit/1495ad9ac7dba909e1c4c000b32bfcd765a67f35))
+
 ## [0.3.0] - 2026-11-10
 
 ### Features
