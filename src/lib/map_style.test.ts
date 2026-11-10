@@ -270,7 +270,7 @@ describe('buildMapStyle', () => {
 		minzoom: 0,
 		maxzoom: 14,
 		// Only vector tilesets carry `vector_layers`; `inlineSources` checks it.
-		...(['osm', 'landcover-vectors'].includes(path) && { vector_layers: [] })
+		...(['osm-vector', 'landcover-vector'].includes(path) && { vector_layers: [] })
 	});
 
 	afterEach(() => vi.unstubAllGlobals());
@@ -289,13 +289,13 @@ describe('buildMapStyle', () => {
 			expect(source).not.toHaveProperty('url');
 		}
 		expect(style.sources['versatiles-shortbread']).toMatchObject({
-			tiles: ['https://tiles.versatiles.org/tiles/osm/{z}/{x}/{y}']
+			tiles: ['https://tiles.versatiles.org/tiles/osm-vector/{z}/{x}/{y}']
 		});
 		expect(style.sources['versatiles-landcover']).toMatchObject({
-			tiles: ['https://tiles.versatiles.org/tiles/landcover-vectors/{z}/{x}/{y}']
+			tiles: ['https://tiles.versatiles.org/tiles/landcover-vector/{z}/{x}/{y}']
 		});
 		expect(style.sources['elevation']).toMatchObject({
-			tiles: ['https://tiles.versatiles.org/tiles/elevation/{z}/{x}/{y}']
+			tiles: ['https://tiles.versatiles.org/tiles/elevation-raster/{z}/{x}/{y}']
 		});
 
 		// A rebuild reuses the TileJSON it already has.

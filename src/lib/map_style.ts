@@ -103,7 +103,7 @@ const cachedFetch: typeof fetch = async (input, init) => {
 
 /**
  * Build the style for MapLibre. The tile server's TileJSON lists its tiles
- * as origin-relative paths (`/tiles/osm/{z}/{x}/{y}`), which MapLibre
+ * as origin-relative paths (`/tiles/osm-vector/{z}/{x}/{y}`), which MapLibre
  * resolves against the *page*, not against the TileJSON it came from — on
  * any other host than the tile server every tile request 404s and the map
  * stays blank. `inlineSources` fetches each TileJSON and writes absolute
