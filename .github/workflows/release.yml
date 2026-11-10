@@ -12,6 +12,9 @@ name: Release
 #
 # It can also be started by hand for a tag, e.g. to run it again after CI
 # was cancelled for the tagged commit: `gh workflow run release.yml -f tag=v0.3.0`.
+# If CI never ran for the tagged commit, start it for the tag first:
+# `gh workflow run ci.yml --ref v0.3.0`. That pushes the `sha-<commit>`
+# images but deploys nothing, as only `main` is deployed.
 on:
   push:
     tags: ['v*']
@@ -81,7 +84,10 @@ jobs:
       # When the tag is pushed together with its commit, CI is still testing
       # and building the images; that takes about 5 minutes, 15 when its
       # build cache is cold. When CI fails or is cancelled, it pushes no
-      # images, so there is no point in waiting any longer.
+      # images, so there is no point in waiting any longer. Neither when CI
+      # never ran for the commit, e.g. because it changed only docs: its run
+      # shows up seconds after the push, so after 2 minutes none will come.
+      # Runs for pull requests don't count, as they push no images.
       - name: Wait for the images of the commit
         env:
           GH_TOKEN: ${{ github.token }}
@@ -89,14 +95,21 @@ jobs:
         run: |
           commit="$(git rev-parse HEAD)"
           sha="sha-${commit::7}" # as docker/metadata-action names it
-          retry="Fix or re-run CI for $commit, then run this workflow again: gh workflow run release.yml -f tag=$TAG"
+          rerun="then run this workflow again: gh workflow run release.yml -f tag=$TAG"
+          retry="Fix or re-run CI for $commit, $rerun"
           for suffix in '' -gpu -server; do
             for attempt in $(seq 60); do
               if docker buildx imagetools inspect "$IMAGE:$sha$suffix" >/dev/null 2>&1; then
                 echo "found $IMAGE:$sha$suffix"
                 continue 2
               fi
-              ci="$(gh run list --workflow ci.yml --commit "$commit" --limit 1 --json status,conclusion --jq '.[0] | "\(.status) \(.conclusion)"')"
+              # the newest run that pushes images, as "<status> <conclusion>", or nothing
+              ci="$(gh run list --workflow ci.yml --commit "$commit" --json event,status,conclusion \
+                --jq 'map(select(.event != "pull_request"))[0] // empty | "\(.status) \(.conclusion)"')"
+              if [ -z "$ci" ] && [ "$attempt" -gt 4 ]; then
+                echo "::error::CI has not run for $commit, so it pushed no images. Start it for the tag: gh workflow run ci.yml --ref $TAG, $rerun"
+                exit 1
+              fi
               if [[ "$ci" == completed* && "$ci" != "completed success" ]]; then
                 echo "::error::CI's run for $commit ended with ${ci#completed }, so it pushed no images. $retry"
                 exit 1
