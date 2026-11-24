@@ -190,8 +190,10 @@
 			onclick={() => resetAnnFields('icon')}
 			disabled={!isAnnSet('icon')}
 			title="Reset shape to the current default"
-			aria-label="Reset shape"><Icon name="reset" size={12} /></button
+			aria-label="Reset shape"
 		>
+			<Icon name="reset" size={12} />
+		</button>
 	</div>
 
 	<ColorRow
@@ -276,8 +278,10 @@
 			onclick={() => resetAnnFields('labelFont')}
 			disabled={!isAnnSet('labelFont')}
 			title="Reset font to the current default"
-			aria-label="Reset font"><Icon name="reset" size={12} /></button
+			aria-label="Reset font"
 		>
+			<Icon name="reset" size={12} />
+		</button>
 	</label>
 
 	<ColorRow

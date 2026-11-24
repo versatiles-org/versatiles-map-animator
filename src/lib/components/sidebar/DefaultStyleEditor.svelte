@@ -81,8 +81,10 @@
 		onclick={() => unsetDefaults('icon')}
 		disabled={!isDefaultSet('icon')}
 		title="Reset shape to the hardcoded default"
-		aria-label="Reset default shape"><Icon name="reset" size={12} /></button
+		aria-label="Reset default shape"
 	>
+		<Icon name="reset" size={12} />
+	</button>
 </div>
 
 <ColorRow
@@ -138,8 +140,10 @@
 		onclick={() => unsetDefaults('labelFont')}
 		disabled={!isDefaultSet('labelFont')}
 		title="Reset font to the hardcoded default"
-		aria-label="Reset default font"><Icon name="reset" size={12} /></button
+		aria-label="Reset default font"
 	>
+		<Icon name="reset" size={12} />
+	</button>
 </label>
 
 <ColorRow

@@ -160,9 +160,9 @@
 	{#if urlError}
 		<div class="banner" role="alert">
 			<span>Couldn’t load shared link: {urlError}</span>
-			<button type="button" onclick={() => (urlError = null)} aria-label="Dismiss"
-				><Icon name="close" /></button
-			>
+			<button type="button" onclick={() => (urlError = null)} aria-label="Dismiss">
+				<Icon name="close" />
+			</button>
 		</div>
 	{/if}
 

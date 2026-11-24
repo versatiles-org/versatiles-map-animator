@@ -286,9 +286,9 @@
 			<Icon name={copied ? 'check' : 'copy'} />
 			{copied ? 'Copied' : 'Copy'}
 		</button>
-		<button type="button" onclick={onClose} aria-label="Close" title="Close"
-			><Icon name="close" /></button
-		>
+		<button type="button" onclick={onClose} aria-label="Close" title="Close">
+			<Icon name="close" />
+		</button>
 	</div>
 </div>
 

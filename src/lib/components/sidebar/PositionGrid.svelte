@@ -54,8 +54,10 @@
 		onclick={onReset}
 		disabled={!canReset}
 		title={resetTitle}
-		aria-label={resetAriaLabel}><Icon name="reset" size={12} /></button
+		aria-label={resetAriaLabel}
 	>
+		<Icon name="reset" size={12} />
+	</button>
 </div>
 
 <style>

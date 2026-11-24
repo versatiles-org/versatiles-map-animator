@@ -73,9 +73,9 @@
 			<Icon name={copied ? 'check' : 'copy'} />
 			{copied ? 'Copied' : 'Copy'}
 		</button>
-		<button type="button" onclick={onClose} aria-label="Close" title="Close"
-			><Icon name="close" /></button
-		>
+		<button type="button" onclick={onClose} aria-label="Close" title="Close">
+			<Icon name="close" />
+		</button>
 	</div>
 	<p class="hint">The iframe scales to its container at the chosen composition aspect ratio.</p>
 </div>

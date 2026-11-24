@@ -134,9 +134,9 @@
 	<details bind:this={menuEl} class="dropdown file-menu">
 		<summary>File <span class="caret"><Icon name="caret" size={12} /></span></summary>
 		<div class="menu" role="menu">
-			<button type="button" role="menuitem" onclick={onImportClick}
-				><Icon name="import" /> Import JSON</button
-			>
+			<button type="button" role="menuitem" onclick={onImportClick}>
+				<Icon name="import" /> Import JSON
+			</button>
 			<button type="button" role="menuitem" onclick={onExport} disabled={!hasKeyframes}>
 				<Icon name="export" /> Export JSON
 			</button>
@@ -237,9 +237,9 @@
 {#if importError}
 	<div class="import-error" role="alert">
 		<span>Import failed: {importError}</span>
-		<button type="button" onclick={() => (importError = null)} aria-label="Dismiss"
-			><Icon name="close" /></button
-		>
+		<button type="button" onclick={() => (importError = null)} aria-label="Dismiss">
+			<Icon name="close" />
+		</button>
 	</div>
 {/if}
 
