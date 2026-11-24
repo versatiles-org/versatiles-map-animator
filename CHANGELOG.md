@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2026-11-24
+
+### Bug Fixes
+
+- **release:** improve handling of CI status for tagged commits ([c227930](https://github.com/versatiles-org/versatiles-map-animator/commit/c227930bb7064230867127a6c57bdaf1f91def56))
+
+### Chores
+
+- **deps:** update @sveltejs/kit and @versatiles/release-tool to latest versions ([d1b72a9](https://github.com/versatiles-org/versatiles-map-animator/commit/d1b72a9b1440d99fbff245592c683ff38ced60e2))
+- **deps:** update dependencies, and format for prettier-plugin-svelte 4.2 ([7206fd7](https://github.com/versatiles-org/versatiles-map-animator/commit/7206fd71a9872b4f1678ae30c9db9252e59a56c1))
+
 ## [0.3.1] - 2026-11-10
 
 ### Build System
