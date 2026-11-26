@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.3] - 2026-11-26
+
+### Chores
+
+- **deps:** bump mwader/static-ffmpeg in /render in the docker group ([7075694](https://github.com/versatiles-org/versatiles-map-animator/commit/7075694631a7532d89c4e5cde1f8124b674c340a))
+- **deps:** update dependencies, @versatiles/style to 9.1.3 ([e1c395f](https://github.com/versatiles-org/versatiles-map-animator/commit/e1c395f32af09b9ffed3b15ee1f6c66e7b10c4ea))
+
 ## [0.3.2] - 2026-11-24
 
 ### Bug Fixes
