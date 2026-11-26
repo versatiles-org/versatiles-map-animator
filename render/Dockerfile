@@ -25,7 +25,7 @@ RUN npm run build
 # desktop libraries the renderer never touches. It has what `formats.mjs`
 # asks for: libx264, prores_ks, ffv1, qtrle and the zscale filter (libzimg).
 # Pinned by digest, so a moved tag cannot change what gets built.
-FROM mwader/static-ffmpeg:9.0.2-1@sha256:f5d100184884eb3e82b0eb14bb5ebf98da99826ac824989720297fb9ef21c822 AS ffmpeg
+FROM mwader/static-ffmpeg:9.1@sha256:dd09509d8c2152bfa601c8c20e3dd166bde906d37951b9f7e8bbd922267f5ac9 AS ffmpeg
 
 FROM node:24-bookworm-slim AS renderer-deps
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
