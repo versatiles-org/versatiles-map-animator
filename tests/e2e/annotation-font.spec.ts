@@ -20,6 +20,10 @@ async function openEditor(page: Page) {
 test('changing font on an example-animation annotation actually fetches the new font', async ({
 	page
 }) => {
+	// Satellite tiles take 40–50 s to settle on CI runners (vs. ~10 s locally),
+	// too close to the 60 s default timeout.
+	test.slow();
+
 	const glyphReqs: string[] = [];
 	page.on('request', (req) => {
 		if (/\/glyphs\//.test(req.url())) glyphReqs.push(req.url());

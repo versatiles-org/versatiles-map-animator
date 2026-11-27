@@ -81,6 +81,10 @@ test.describe('viewport-size invariance at fixed aspect ratio', () => {
 	});
 
 	test('high-pitch demo: 640x360 and 1280x720 (16:9) framing within 0.05°', async ({ page }) => {
+		// High-pitch tiles take 40–50 s to settle on CI runners (vs. ~3 s
+		// locally), too close to the 60 s default timeout.
+		test.slow();
+
 		await openViewer(page, 640, 360, DEMO_HASH, SEEK_TIME);
 		const small = await projectedCorners(page);
 
